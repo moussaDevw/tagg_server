@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const app = express();
 const nodemailer = require("nodemailer");
+const router = express.Router();
 
 app.use(cors());
 app.use(express.json());
@@ -10,22 +11,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "./out")));
 
-app.get("/blog", function (req, res) {
-  res.sendFile(path.join(__dirname, "./out", "blog.html"));
+router.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./out/index.html"));
 });
 
-app.get("/services", function (req, res) {
-  res.sendFile(path.join(__dirname, "./out", "services.html"));
-});
-
-app.get("/qui-sommes-nous", function (req, res) {
-  res.sendFile(path.join(__dirname, "./out", "qui-sommes-nous.html"));
-});
-
-app.get("/contact", function (req, res) {
-  res.sendFile(path.join(__dirname, "./out", "contact.html"));
-});
-
+app.use("/", router);
 const unknownEndpoint = (request, response) => {
   response.status(404).sendFile(path.join(__dirname, "./out", "404.html"));
 };
